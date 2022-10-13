@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Util util = null;
+    private Util util = new Util();
 
     public UserDaoJDBCImpl() {
-        util = new Util();
+
     }
 
     public void createUsersTable() {
         try (Connection connection = util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE users " +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users " +
                     "(id INT NOT NULL AUTO_INCREMENT, " +
                     "name VARCHAR(45) NULL, " +
                     "lastname VARCHAR(45) NULL, " +
@@ -66,6 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
+
         try (Connection connection = util.getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
